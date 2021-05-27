@@ -59,9 +59,15 @@ public class ProgramExLibrary extends Thread{
                     Output = ActionListingEx(RequestStr);
                 } else if (Req.equals("c_10")) {
                     Output = CreateListingEx(RequestStr);
+                } else if (Req.equals("c_11")) {
+                    Output = AdminHelpEx(RequestStr);
+                } else if (Req.equals("c_12")) {
+                    CreateDeptEx(RequestStr);
+                } else if (Req.equals("c_13")) {
+                    Output = DeptListEx(RequestStr);
+                } else if (Req.equals("c_14")) {
+                    Output = AccountCreateEx(RequestStr);
                 }
-
-
 
 
                 //Send Back Requested Data
@@ -388,6 +394,7 @@ public class ProgramExLibrary extends Thread{
 
     }
 
+
     public Object[][] ActionListingEx(String Request) throws SQLException {
         //Request: 'ExCode,Dept,ListingID' | Give Confirmation (0/1)
         //Change: ListingID ActiveStatus --> 1(NotActive)| Buying(UserSelling)(Dept. -Resource(X) & +Credits) OR Selling(UserBuying)(Dept. +Resource(X) & -Credits)
@@ -576,8 +583,106 @@ public class ProgramExLibrary extends Thread{
     }
 
 
+    public Object[][] AdminHelpEx(String Request) throws SQLException {
+        //Request: 'ExCode' | Give the most recent help messages
+
+        //Connect & Get DB Data
+        Connection connection = null;
+        connection = DriverManager.getConnection(url, user, pwd);
+
+        //Pulls Data From DB and put in Object Array
+        Object[][] MessageData = new Object[10][3];
+        Statement stmt1 = connection.createStatement();
+        ResultSet rs1 = stmt1.executeQuery("SELECT * FROM helpmsg ORDER BY C_Date DESC;");
+        //rs1.next(); //int listcount = (rs1.getInt("COUNT(*)"));
+
+        int i = 0;
+        while (rs1.next()){
+            //Place in Array - MessageData
+            MessageData[i][0] = rs1.getString("Username");
+            MessageData[i][1] = rs1.getString("Message");
+            MessageData[i][2] = rs1.getString("C_Date");
+            i++;
+        }
+
+        //Return MessageData (Username, Message, C_Date)
+        return MessageData;
+    }
 
 
+    public void CreateDeptEx(String Request) throws SQLException {
+        //Request: 'ExCode, Department Name' | Place new department into DB
+        //Break Down Request
+        String[] ReqDetails = Request.split(","); String DeptName = ReqDetails[1];
+
+        //Connect & Get DB Data
+        Connection connection = null;
+        connection = DriverManager.getConnection(url, user, pwd);
+
+        //Place Department Name in 'departmentsinfo' db
+        Statement stmt1 = connection.createStatement();
+        stmt1.executeQuery("INSERT INTO departmentsinfo (Department,Item,Quantity) VALUES ('" + DeptName + "','Credits',0);");
+        connection.commit();
+    }
+
+
+    public Object[][] DeptListEx(String Request) throws SQLException {
+        //Request: 'ExCode' | Give the most recent help messages
+
+        //Connect & Get DB Data
+        Connection connection = null;
+        connection = DriverManager.getConnection(url, user, pwd);
+
+        //Pull departments count from DB
+        Statement stmt2 = connection.createStatement();
+        ResultSet rs2 = stmt2.executeQuery("SELECT COUNT(DISTINCT Department) FROM departmentsinfo;");
+        rs2.next(); int deptcount = (rs2.getInt("COUNT(DISTINCT Department)"));
+
+        System.out.println(deptcount);
+
+        //Pulls Data From DB and put in Object Array
+        Object[][] DeptList = new Object[deptcount+1][1]; DeptList[0][0] = deptcount;
+        Statement stmt1 = connection.createStatement();
+        ResultSet rs1 = stmt1.executeQuery("SELECT DISTINCT Department FROM departmentsinfo ORDER BY Department ASC;");
+
+        int i = 1;
+        while (rs1.next()){
+            //Place in Array - MessageData
+            DeptList[i][0] = rs1.getString("Department");
+            i++;
+        }
+
+        //Return DeptList (Department)
+        return DeptList;
+    }
+
+
+    public Object[][] AccountCreateEx(String Request) throws SQLException {
+        //Request: 'ExCode, Username, Password, Department' | Place new account & details into DB
+        //Break Down Request
+        String[] ReqDetails = Request.split(",");
+        String Username = ReqDetails[1]; String Password = ReqDetails[2]; String Department = ReqDetails[3];
+
+        //Connect & Get DB Data
+        Connection connection = null;
+        connection = DriverManager.getConnection(url, user, pwd);
+
+        //Verify User Doesn't Exist Already - Pull info from DB
+        Statement stmt1 = connection.createStatement();
+        ResultSet rs1 = stmt1.executeQuery("SELECT COUNT(Username) FROM users WHERE Username = '" + Username + "';");
+        rs1.next(); int CheckUsername = rs1.getInt("COUNT(Username)");
+
+        Object[][] DeptList = new Object[1][1]; DeptList[0][0] = 1;
+        if (CheckUsername == 0) {
+            //Place Account Details in 'users' DB
+            Statement stmt2 = connection.createStatement();
+            stmt2.executeQuery("INSERT INTO users (Username,Password,Department) VALUES ('" + Username + "','" + Password + "','" + Department + "');");
+            connection.commit();
+            DeptList[0][0] = 0;
+        }
+
+        return DeptList;
+    }
 
 
 
