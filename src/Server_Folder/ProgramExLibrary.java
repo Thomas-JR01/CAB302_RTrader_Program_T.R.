@@ -54,7 +54,7 @@ public class ProgramExLibrary extends Thread{
                 } else if (Req.equals("c_07")) {
                     Output = ClientResetPasswordEx(RequestStr);
                 } else if (Req.equals("c_08")) {
-                    DeptDeleteListingEx(RequestStr);
+                    DeleteListingEx(RequestStr);
                 } else if (Req.equals("c_09")) {
                     Output = ActionListingEx(RequestStr);
                 } else if (Req.equals("c_10")) {
@@ -67,19 +67,30 @@ public class ProgramExLibrary extends Thread{
                     Output = DeptListEx(RequestStr);
                 } else if (Req.equals("c_14")) {
                     Output = AccountCreateEx(RequestStr);
+                } else if (Req.equals("c_15")) {
+                    ManageResourcesEx(RequestStr);
+                } else if (Req.equals("c_16")) {
+                    Output = AccountsEx(RequestStr);
+                } else if (Req.equals("c_17")) {
+                    AdminResetPasswordEx(RequestStr);
+                } else if (Req.equals("c_18")) {
+                    DeleteAccountEx(RequestStr);
                 }
 
 
                 //Send Back Requested Data
-                PrintWriter pr = new PrintWriter(s.getOutputStream());
-                int os1 = Output.length;
-                int os2 = Output[0].length;
-                for (int i = 0; i < os1; i++) {
-                    for (int j = 0; j < os2; j++) {
-                        pr.println(Output[i][j]);
-                        pr.flush();
+                if (Output != null) {
+                    PrintWriter pr = new PrintWriter(s.getOutputStream());
+                    int os1 = Output.length;
+                    int os2 = Output[0].length;
+                    for (int i = 0; i < os1; i++) {
+                        for (int j = 0; j < os2; j++) {
+                            pr.println(Output[i][j]);
+                            pr.flush();
+                        }
                     }
                 }
+
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -88,6 +99,7 @@ public class ProgramExLibrary extends Thread{
     }
 
     //------------------------------------------------------------------------------------------------------------------
+
 
     public Object[][] LoginEx(String Request) throws SQLException {
         //Request: 'ExCode,Username,Password' | Authenticate the user, then give back ID and Dept
@@ -348,7 +360,7 @@ public class ProgramExLibrary extends Thread{
     }
 
 
-    public void DeptDeleteListingEx(String Request) throws SQLException {
+    public void DeleteListingEx(String Request) throws SQLException {
         //Request: 'ExCode,ListingID' | Change ListingID ActiveStatus --> 1(NotActive)
         //Break Down Request
         String[] ReqDetails = Request.split(","); String ListingID = ReqDetails[1];
@@ -594,7 +606,6 @@ public class ProgramExLibrary extends Thread{
         Object[][] MessageData = new Object[10][3];
         Statement stmt1 = connection.createStatement();
         ResultSet rs1 = stmt1.executeQuery("SELECT * FROM helpmsg ORDER BY C_Date DESC;");
-        //rs1.next(); //int listcount = (rs1.getInt("COUNT(*)"));
 
         int i = 0;
         while (rs1.next()){
@@ -685,10 +696,120 @@ public class ProgramExLibrary extends Thread{
     }
 
 
+    public void ManageResourcesEx(String Request) throws SQLException {
+        //Request: 'ExCode, Department, Credits, Resource_Name, Resource_Quantity' | Place/Update Credits And/Or Resources in DB
+        //Break Down Request
+        String[] ReqDetails = Request.split(",");
+        String Department = ReqDetails[1]; int Credits = Integer.parseInt(ReqDetails[2]); String Resource_Name = ReqDetails[3]; int Resource_Quantity = Integer.parseInt(ReqDetails[4]);
+
+        //Connect & Get DB Data
+        Connection connection = null;
+        connection = DriverManager.getConnection(url, user, pwd);
+
+        String Query1 = "";
+        String Query2 = "";
+
+        //Check if Credits > 0 , to see if this needs to be updated
+        if (Credits > 0) {
+            //Add Credits To Department
+            //Get The Departments Current Credits Qty
+            Statement stmt1 = connection.createStatement();
+            ResultSet rs1 = stmt1.executeQuery("SELECT Quantity FROM departmentsinfo WHERE Item = 'Credits' AND Department = '" + Department + "';");
+            rs1.next(); int CurrentCredits = rs1.getInt("Quantity");
+
+            //Update and add credits to department
+            Query1 = "UPDATE departmentsinfo SET Quantity = " + (CurrentCredits + Credits) + " WHERE Department = '" + Department + "' AND Item = 'Credits';";
+        }
+
+        //Check if resource adding/update action is needed
+        if ((Resource_Name != null) && (Resource_Quantity > 0)) {
+            Statement stmt2 = connection.createStatement();
+            ResultSet rs2 = stmt2.executeQuery("SELECT COUNT(Quantity) FROM departmentsinfo WHERE Item = '" + Resource_Name + "' AND Department = '" + Department + "';");
+            rs2.next(); int ResourceCheck = rs2.getInt("COUNT(Quantity)"); //if 'o' then resource doesn't exist yet
+
+            //Check if resource is to be added or updated
+            if (ResourceCheck == 0) { //Create
+                Query2 = "INSERT INTO departmentsinfo (Department,Item,Quantity) VALUES ('" + Department + "','" + Resource_Name + "'," + Resource_Quantity + ");";
+            } else { //Update
+                //Get Current Qty to add to new qty
+                Statement stmt3 = connection.createStatement();
+                ResultSet rs3 = stmt3.executeQuery("SELECT Quantity FROM departmentsinfo WHERE Item = '" + Resource_Name + "' AND Department = '" + Department + "';");
+                rs3.next(); int CurrentResourceQty = rs3.getInt("Quantity");
+
+                //Update DB
+                Query2 = "UPDATE departmentsinfo SET Quantity = " + (CurrentResourceQty + Resource_Quantity) + " WHERE Department = '" + Department + "' AND Item = '" + Resource_Name + "';";
+            }
+        }
+
+        //Enters Info to DB
+        Statement stmt4 = connection.createStatement();
+        stmt4.executeQuery(Query1);
+        stmt4.executeQuery(Query2);
+        connection.commit();
+    }
 
 
+    public Object[][] AccountsEx(String Request) throws SQLException {
+        //Request: 'ExCode' | Give ActiveListings (UserID,Username,Department)
+        //Connect & Get DB Data
+        Connection connection = null;
+        connection = DriverManager.getConnection(url, user, pwd);
+
+        //Pulls Count of Accounts from DB
+        Statement stmt1 = connection.createStatement();
+        ResultSet rs1 = stmt1.executeQuery("SELECT COUNT(UserID) FROM users");
+        rs1.next(); int AccountCount = (rs1.getInt("COUNT(UserID)"))+1;
+
+        Object[][] AccountData = new Object[AccountCount][3];
+
+        //Pulls Data From DB and put in Object Array
+        Statement stmt2 = connection.createStatement();
+        ResultSet rs2 = stmt2.executeQuery("SELECT * FROM users");
+        AccountData[0][0] = Integer.toString(AccountCount);
+        int i = 1;
+        while (rs2.next()){
+            //Place in Array - AccountData
+            AccountData[i][0] = Integer.toString(rs2.getInt("UserID"));
+            AccountData[i][1] = rs2.getString("Username");
+            AccountData[i][2] = rs2.getString("Department");
+            i++;
+        }
+
+        //Return AccountData (UserID,Username,Department)
+        return AccountData;
+    }
 
 
+    public void AdminResetPasswordEx(String Request) throws SQLException {
+        //Request: 'ExCode,UserID,NewPassword' | Change User Password
+        //Break Down Request
+        String[] ReqDetails = Request.split(","); String UserID = ReqDetails[1]; String NewPassword = ReqDetails[2];
+
+        //Connect & Get DB Data
+        Connection connection = null;
+        connection = DriverManager.getConnection(url, user, pwd);
+
+        //Updates Users password
+        Statement stmt1 = connection.createStatement();
+        stmt1.executeQuery("UPDATE users SET Password = '" + NewPassword + "' WHERE UserID = " + UserID + ";");
+        connection.commit();
+    }
+
+
+    public void DeleteAccountEx(String Request) throws SQLException {
+        //Request: 'ExCode,UserID' | Change User Password
+        //Break Down Request
+        String[] ReqDetails = Request.split(","); String UserID = ReqDetails[1];
+
+        //Connect & Get DB Data
+        Connection connection = null;
+        connection = DriverManager.getConnection(url, user, pwd);
+
+        //Updates Users password
+        Statement stmt1 = connection.createStatement();
+        stmt1.executeQuery("DELETE FROM users WHERE UserID = " + UserID + ";");
+        connection.commit();
+    }
 
 
 
