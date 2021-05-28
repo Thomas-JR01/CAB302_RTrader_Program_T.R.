@@ -38,43 +38,25 @@ public class ProgramExLibrary extends Thread{
                 String[] RequestSplit = RequestStr.split(",");
                 String Req = RequestSplit[0];
 
-                //make switch case https://www.w3schools.com/java/java_switch.asp
-                if (Req.equals("c_01")) {
-                    Output = LoginEx(RequestStr);
-                } else if (Req.equals("c_02")) {
-                    Output = ClientHistoryEx(RequestStr);
-                } else if (Req.equals("c_03")) {
-                    Output = UserDeptDetailsEx(RequestStr);
-                } else if (Req.equals("c_04")) {
-                    Output = CurrentListingsEx(RequestStr);
-                } else if (Req.equals("c_05")) {
-                    Output = DepartmentListingsEx(RequestStr);
-                } else if (Req.equals("c_06")) {
-                    ClientHelpEx(RequestStr);
-                } else if (Req.equals("c_07")) {
-                    Output = ClientResetPasswordEx(RequestStr);
-                } else if (Req.equals("c_08")) {
-                    DeleteListingEx(RequestStr);
-                } else if (Req.equals("c_09")) {
-                    Output = ActionListingEx(RequestStr);
-                } else if (Req.equals("c_10")) {
-                    Output = CreateListingEx(RequestStr);
-                } else if (Req.equals("c_11")) {
-                    Output = AdminHelpEx(RequestStr);
-                } else if (Req.equals("c_12")) {
-                    CreateDeptEx(RequestStr);
-                } else if (Req.equals("c_13")) {
-                    Output = DeptListEx(RequestStr);
-                } else if (Req.equals("c_14")) {
-                    Output = AccountCreateEx(RequestStr);
-                } else if (Req.equals("c_15")) {
-                    ManageResourcesEx(RequestStr);
-                } else if (Req.equals("c_16")) {
-                    Output = AccountsEx(RequestStr);
-                } else if (Req.equals("c_17")) {
-                    AdminResetPasswordEx(RequestStr);
-                } else if (Req.equals("c_18")) {
-                    DeleteAccountEx(RequestStr);
+                switch (Req) {
+                    case "c_01" -> Output = LoginEx(RequestStr);
+                    case "c_02" -> Output = ClientHistoryEx(RequestStr);
+                    case "c_03" -> Output = UserDeptDetailsEx(RequestStr);
+                    case "c_04" -> Output = CurrentListingsEx(RequestStr);
+                    case "c_05" -> Output = DepartmentListingsEx(RequestStr);
+                    case "c_06" -> ClientHelpEx(RequestStr);
+                    case "c_07" -> Output = ClientResetPasswordEx(RequestStr);
+                    case "c_08" -> DeleteListingEx(RequestStr);
+                    case "c_09" -> Output = ActionListingEx(RequestStr);
+                    case "c_10" -> Output = CreateListingEx(RequestStr);
+                    case "c_11" -> Output = AdminHelpEx(RequestStr);
+                    case "c_12" -> CreateDeptEx(RequestStr);
+                    case "c_13" -> Output = DeptListEx(RequestStr);
+                    case "c_14" -> Output = AccountCreateEx(RequestStr);
+                    case "c_15" -> ManageResourcesEx(RequestStr);
+                    case "c_16" -> Output = AccountsEx(RequestStr);
+                    case "c_17" -> AdminResetPasswordEx(RequestStr);
+                    case "c_18" -> DeleteAccountEx(RequestStr);
                 }
 
 

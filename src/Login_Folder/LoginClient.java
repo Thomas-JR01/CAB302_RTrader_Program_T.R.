@@ -1,5 +1,6 @@
 package Login_Folder;
 
+import Admin_Folder.AdminMain;
 import Server_Folder.ServerClient;
 import User_Folder.UserMain;
 
@@ -59,7 +60,7 @@ public class LoginClient {
                     //Send User To Related Clients Admin(X,Admin), User(X,X)) - Send With Those Details
                     if (UserDetails[1].equals("Admin")) {
                         //Send User to Admin Client
-                        System.out.println("Made It Here 2");
+                        AdminMain.createGUI();
                     } else if (!(UserDetails[0].equals("0"))){
                         UserMain.createGUI(UserDetails[0],UserDetails[1]);
                     } else {
