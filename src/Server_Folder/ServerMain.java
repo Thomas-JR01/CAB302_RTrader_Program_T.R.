@@ -2,23 +2,13 @@ package Server_Folder;
 
 import javax.swing.*;
 import java.sql.*;
-import java.net.*;
 import java.io.*;
-import java.time.LocalDate;
 
 public class ServerMain {
 
-
-    public static void main(String[] args) throws IOException {
-        System.out.println(LocalDate.now());
-        mainSent();
-    }
-
+//  public static void main(String[] args) throws IOException { mainSent(); }
 
     public static  void mainSent() throws IOException {
-        // Test Output
-        System.out.println("Successfully Executed Main Method");
-
         // Open Main "Server Client" Form/GUI
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -30,7 +20,6 @@ public class ServerMain {
                 }
             }
         });
-
         ProgramExLibrary.ExLibrary();
     }
 
@@ -45,6 +34,5 @@ public class ServerMain {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
 
 }

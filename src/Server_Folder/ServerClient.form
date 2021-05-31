@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="9296d" class="javax.swing.JLabel" binding="SC_L_1">
+      <component id="9296d" class="javax.swing.JLabel" binding="SC_L_11">
         <constraints>
           <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

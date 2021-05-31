@@ -620,7 +620,7 @@ public class ProgramExLibrary extends Thread{
 
 
     public Object[][] DeptListEx(String Request) throws SQLException {
-        //Request: 'ExCode' | Give the most recent help messages
+        //Request: 'ExCode' | Give list of all departments
 
         //Connect & Get DB Data
         Connection connection = null;
@@ -732,7 +732,7 @@ public class ProgramExLibrary extends Thread{
 
 
     public Object[][] AccountsEx(String Request) throws SQLException {
-        //Request: 'ExCode' | Give ActiveListings (UserID,Username,Department)
+        //Request: 'ExCode' | Give List of all users accounts and related information.
         //Connect & Get DB Data
         Connection connection = null;
         connection = DriverManager.getConnection(url, user, pwd);
@@ -779,7 +779,7 @@ public class ProgramExLibrary extends Thread{
 
 
     public void DeleteAccountEx(String Request) throws SQLException {
-        //Request: 'ExCode,UserID' | Change User Password
+        //Request: 'ExCode,UserID' | Delete Users Account
         //Break Down Request
         String[] ReqDetails = Request.split(","); String UserID = ReqDetails[1];
 

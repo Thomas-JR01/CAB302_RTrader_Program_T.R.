@@ -1,7 +1,5 @@
 package Admin_Folder;
 
-import Login_Folder.LoginClient;
-
 import javax.swing.*;
 
 public class AdminMain {

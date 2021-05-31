@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class ServerLoginClient {
     private JButton LC_Button;
@@ -13,7 +12,6 @@ public class ServerLoginClient {
     private JPanel rootPanel;
 
     public ServerLoginClient() {
-
         //Login Button Has Been Clicked
         LC_Button.addActionListener(new ActionListener() {
             @Override
@@ -34,7 +32,6 @@ public class ServerLoginClient {
                         ioException.printStackTrace();
                     }
                 }
-
             }
         });
     }
@@ -43,11 +40,9 @@ public class ServerLoginClient {
         return rootPanel;
     }
 
-    public static void main(String[] args) throws SQLException {
-
+    public static void main(String[] args) {
         //Open GUI - Collect UserInput and Verify Data
         createGUI();
-
     }
 
     public static void createGUI() {
@@ -60,6 +55,5 @@ public class ServerLoginClient {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
 
 }

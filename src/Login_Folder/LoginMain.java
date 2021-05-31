@@ -1,15 +1,12 @@
 package Login_Folder;
 
 import javax.swing.*;
-import java.sql.SQLException;
 
 public class LoginMain {
 
-    public static void main(String[] args) throws SQLException {
-
+    public static void main(String[] args) {
         //Open GUI - Collect UserInput and Verify Data
         createGUI();
-
     }
 
     public static void createGUI() {

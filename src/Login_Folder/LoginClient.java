@@ -1,23 +1,17 @@
 package Login_Folder;
 
 import Admin_Folder.AdminMain;
-import Server_Folder.ServerClient;
 import User_Folder.UserMain;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.net.*;
 import java.io.*;
 
 public class LoginClient {
     private JPanel rootPanel;
-    private JLabel label1;
     private JButton LC_Button;
-    private JLabel label2;
-    private JLabel label4;
-    private JLabel label3;
     private JPasswordField LC_Pass;
     private JTextField LC_User;
 
@@ -25,10 +19,8 @@ public class LoginClient {
     public JPanel getRootPanel(){
         return rootPanel;
     }
-
     //Main method & form actions
     public LoginClient() {
-
         //Login Button Has Been Clicked
         LC_Button.addActionListener(new ActionListener() {
             @Override
@@ -36,8 +28,6 @@ public class LoginClient {
                 //Login Button Action
                 String usernameinput = LC_User.getText();
                 String passwordinput = LC_Pass.getText();
-
-                String[] CollectedUserDetails = {usernameinput,passwordinput};
 
                 //CONNECTION TO SERVER CLIENT - REQUESTING AUTHENTICATION FOR "USER DETAILS" & THE OTHER RELEVANT DETAILS
                 try {
@@ -47,7 +37,6 @@ public class LoginClient {
                     PrintWriter pr = new PrintWriter(s.getOutputStream());
                     pr.println("c_01," + usernameinput + "," + passwordinput);
                     pr.flush();
-
 
                     //Get Requested Data
                     InputStreamReader in = new InputStreamReader(s.getInputStream());
@@ -71,13 +60,9 @@ public class LoginClient {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-
-
             }
         });
 
     }
-
-
 
 }

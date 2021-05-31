@@ -10,9 +10,7 @@ public class Server_DBConnect {
         String url = "jdbc:mariadb://127.0.0.1:3306/rtraderdb";
         String user = "root";
         String pwd = "cab302";
-
         connection = DriverManager.getConnection(url, user, pwd);
-        System.out.println("Connected to database successfully...");
 
         //Pulls Count of listings from DB
         Statement stmt1 = connection.createStatement();
@@ -38,15 +36,11 @@ public class Server_DBConnect {
             ListingData[i][2] = rs2.getInt("Credits");
             ListingData[i][3] = rs2.getInt("Quantity");
             ListingData[i][4] = rs2.getString("Department");
-            Date temp = rs2.getDate("CDate");
 
             i++;
         }
-
         return ListingData;
     }
-
-
 
 }
 

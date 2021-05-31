@@ -16,22 +16,22 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="725a9" class="javax.swing.JLabel" binding="label1">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font size="28" style="1"/>
-              <text value="Asset Trading Platform"/>
-            </properties>
-          </component>
-          <component id="f8957" class="javax.swing.JLabel" binding="label2">
+          <component id="7d555" class="javax.swing.JLabel">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="28" style="1"/>
               <text value="X Corporation"/>
+            </properties>
+          </component>
+          <component id="b3407" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="28" style="1"/>
+              <text value="Asset Trading Platform"/>
             </properties>
           </component>
         </children>
@@ -63,15 +63,6 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c8aa9" class="javax.swing.JLabel" binding="label4">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font size="20"/>
-              <text value="Password: "/>
-            </properties>
-          </component>
           <component id="ec4dd" class="javax.swing.JPasswordField" binding="LC_Pass">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
@@ -80,6 +71,15 @@
             </constraints>
             <properties>
               <font size="20"/>
+            </properties>
+          </component>
+          <component id="34cd8" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="20"/>
+              <text value="Password: "/>
             </properties>
           </component>
         </children>
@@ -92,15 +92,6 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="b30fd" class="javax.swing.JLabel" binding="label3">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font size="20"/>
-              <text value="Username:"/>
-            </properties>
-          </component>
           <component id="d6e45" class="javax.swing.JTextField" binding="LC_User">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
@@ -109,6 +100,15 @@
             </constraints>
             <properties>
               <font size="20"/>
+            </properties>
+          </component>
+          <component id="be737" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="20"/>
+              <text value="Username:"/>
             </properties>
           </component>
         </children>
